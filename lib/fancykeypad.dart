@@ -6,14 +6,18 @@ import 'package:flutter/services.dart';
 
 class AppKeyPad extends StatefulWidget {
   final ValueSetter<String>? onKeyTap;
-  final bool showLocalAuth;
   final int maxAllowableCharacters;
+  final bool autoSubmit;
   final double? height;
+  final HapticFeedback? hapticFeedback;
+  final double childAspectRatio;
   const AppKeyPad({
     Key? key,
     this.onKeyTap,
     this.height,
-    this.showLocalAuth = false,
+    this.childAspectRatio = 1,
+    this.autoSubmit = false,
+    this.hapticFeedback,
     required this.maxAllowableCharacters,
   }) : super(key: key);
   @override
@@ -64,6 +68,7 @@ class _AppKeyPadState extends State<AppKeyPad> {
       crossAxisCount: 3,
       mainAxisSpacing: 25.0,
       crossAxisSpacing: 40.0,
+      childAspectRatio: widget.childAspectRatio,
       children: [
         for (var i = 0; i < buttonTexts.length; i++)
           LayoutBuilder(builder: (context, constraints) {
@@ -79,9 +84,7 @@ class _AppKeyPadState extends State<AppKeyPad> {
                       ),
                     ),
                     constraints: constraints,
-                    padding: widget.showLocalAuth
-                        ? EdgeInsets.zero
-                        : const EdgeInsets.all(10.0),
+                    padding: const EdgeInsets.all(10.0),
                     child: IconButton(
                       constraints: constraints,
                       onPressed: () {
@@ -104,6 +107,9 @@ class _AppKeyPadState extends State<AppKeyPad> {
                     : ValueListenableBuilder(
                         valueListenable: activeButtonListener,
                         builder: (context, String val, _) {
+                          if (!widget.hapticFeedback.isNull) {
+                            // widget.hapticFeedback();
+                          }
                           return AppKeyPadButton(
                             constraints: constraints,
                             key: Key("pad$buttonText"),
@@ -190,4 +196,8 @@ class AppKeyPadButton extends StatelessWidget {
       ),
     );
   }
+}
+
+extension XObject on Object? {
+  bool get isNull => this == null;
 }
