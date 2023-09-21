@@ -13,9 +13,11 @@ class FancyKeypad extends StatefulWidget {
   final bool enableDot;
   final HapticFeedback? hapticFeedback;
   final double childAspectRatio;
-  final Color color;
-  final Color splashColor;
-  final Color borderColor;
+  final Color? color;
+  final Duration? splashAnimationDuration;
+  final Color? splashColor;
+  final Color? borderColor;
+  final Color? textColor;
   const FancyKeypad({
     Key? key,
     required this.onKeyTap,
@@ -24,10 +26,12 @@ class FancyKeypad extends StatefulWidget {
     this.hapticFeedback,
     this.enableDot = false,
     this.borderColor = const Color(0XFFF3F3F3),
-    this.color = Colors.white,
+    this.color,
     this.shape,
     this.onSubmit,
-    this.splashColor = Colors.white,
+    this.splashColor,
+    this.textColor,
+    this.splashAnimationDuration,
     required this.maxAllowableCharacters,
   }) : super(key: key);
   @override
@@ -79,6 +83,8 @@ class _FancyKeypadState extends State<FancyKeypad> {
             color: Color(0XFFF3F3F3),
           ),
         );
+    Duration animationDuration =
+        widget.splashAnimationDuration ?? const Duration(milliseconds: 200);
     return GridView.count(
       physics: const NeverScrollableScrollPhysics(),
       crossAxisCount: 3,
@@ -107,13 +113,13 @@ class _FancyKeypadState extends State<FancyKeypad> {
                           widget.onKeyTap(value);
                         },
                         icon: Icon(
-                          Icons.delete,
+                          Icons.backspace,
                           size: constraints.maxWidth / 2,
-                          color: widget.color,
+                          color: widget.textColor,
                         ),
                       ),
                     )
-                  : (buttonText == "."
+                  : (buttonText == "." && !widget.enableDot
                       ? const SizedBox()
                       : ValueListenableBuilder(
                           valueListenable: activeButtonListener,
@@ -122,13 +128,16 @@ class _FancyKeypadState extends State<FancyKeypad> {
                               constraints: constraints,
                               key: Key("pad$buttonText"),
                               isTapped: val == buttonText,
+                              splashColor: widget.splashColor ?? Colors.white,
+                              textColor: widget.textColor ?? Colors.black,
+                              color: widget.color ?? Colors.white,
+                              splashAnimationDuration: animationDuration,
+                              shape: shape,
                               onTap: () async {
                                 HapticFeedback.mediumImpact();
                                 activeButtonListener.value = buttonText;
                                 await Future.delayed(
-                                  const Duration(
-                                    milliseconds: 100,
-                                  ),
+                                  animationDuration,
                                 );
                                 activeButtonListener.value = "";
                                 if (value.length <
@@ -162,41 +171,49 @@ class FancyKeypadButton extends StatelessWidget {
     required this.text,
     required this.isTapped,
     required this.onTap,
+    required this.splashColor,
+    required this.shape,
+    required this.textColor,
+    required this.splashAnimationDuration,
+    required this.color,
   }) : super(key: key);
   final BoxConstraints constraints;
   final String text;
   final bool isTapped;
+  final Color textColor;
+  final Duration splashAnimationDuration;
+  final ShapeBorder shape;
+  final Color splashColor;
   final VoidCallback onTap;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       customBorder: const CircleBorder(),
-      child: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        child: Container(
-          key: ValueKey(text),
-          decoration: ShapeDecoration(
-            //  color: isTapped ? AppColors.primary : Colors.white,
-            shape: const CircleBorder(
-              side: BorderSide(
-                color: Color(0XFFF3F3F3),
-              ),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 800),
+        key: ValueKey(text),
+        decoration: ShapeDecoration(
+          color: isTapped ? splashColor : color,
+          shape: const CircleBorder(
+            side: BorderSide(
+              color: Color(0XFFF3F3F3),
             ),
           ),
-          constraints: constraints.tighten(
-            width: constraints.maxWidth,
-            height: constraints.maxHeight,
-          ),
-          child: Center(
-            child: Text(
-              text,
-              style: TextStyle(
-                fontSize: 25.0,
-                fontWeight: FontWeight.w700,
-                //color: isTapped ? AppColors.white : AppColors.primary,
-              ),
+        ),
+        constraints: constraints.tighten(
+          width: constraints.maxWidth,
+          height: constraints.maxHeight,
+        ),
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(
+              fontSize: 25.0,
+              fontWeight: FontWeight.w700,
+              color: isTapped ? Colors.white : textColor,
             ),
           ),
         ),

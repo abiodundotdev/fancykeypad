@@ -1,7 +1,7 @@
 name: fancykeypad
 description: A new Flutter package project.
 version: 0.0.1
-homepage:
+homepage: homepage,
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
