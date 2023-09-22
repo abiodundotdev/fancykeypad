@@ -15,6 +15,7 @@ class FancyKeypad extends StatefulWidget {
   final double childAspectRatio;
   final Color? color;
   final Duration? splashAnimationDuration;
+  final Curve curve;
   final Color? splashColor;
   final Color? borderColor;
   final Color? textColor;
@@ -32,6 +33,7 @@ class FancyKeypad extends StatefulWidget {
     this.splashColor,
     this.textColor,
     this.splashAnimationDuration,
+    this.curve = Curves.linear,
     required this.maxAllowableCharacters,
   }) : super(key: key);
   @override
@@ -127,6 +129,7 @@ class _FancyKeypadState extends State<FancyKeypad> {
                             return FancyKeypadButton(
                               constraints: constraints,
                               key: Key("pad$buttonText"),
+                              curve: widget.curve,
                               isTapped: val == buttonText,
                               splashColor: widget.splashColor ?? Colors.white,
                               textColor: widget.textColor ?? Colors.black,
@@ -176,6 +179,7 @@ class FancyKeypadButton extends StatelessWidget {
     required this.textColor,
     required this.splashAnimationDuration,
     required this.color,
+    required this.curve,
   }) : super(key: key);
   final BoxConstraints constraints;
   final String text;
@@ -186,13 +190,15 @@ class FancyKeypadButton extends StatelessWidget {
   final Color splashColor;
   final VoidCallback onTap;
   final Color color;
+  final Curve curve;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      customBorder: const CircleBorder(),
+      customBorder: shape,
       child: AnimatedContainer(
+        curve: curve,
         duration: splashAnimationDuration,
         key: ValueKey(text),
         decoration: ShapeDecoration(
