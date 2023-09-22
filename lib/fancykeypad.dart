@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
-///FancyKey to create a modern customizable numeric keypad
-///Use [FancyKeypad] and pass the required params to use
 class FancyKeypad extends StatefulWidget {
   /// A callback called every time a button is tapped
   final ValueSetter<String> onKeyTap;
@@ -27,7 +25,7 @@ class FancyKeypad extends StatefulWidget {
   final bool enableDot;
 
   ///To set haptic feedback on key tap
-  final HapticFeedback? hapticFeedback;
+  final bool enableHapticFeedback;
 
   ///Child aspect ratio, to set the size of the buttons
   final double childAspectRatio;
@@ -55,12 +53,15 @@ class FancyKeypad extends StatefulWidget {
 
   ///Buttons text color
   final Color? textColor;
+
+  ///FancyKey to create a modern customizable numeric keypad
+  ///Use [FancyKeypad] and pass the required params to use
   const FancyKeypad({
     Key? key,
     required this.onKeyTap,
     this.childAspectRatio = 1,
     this.autoSubmit = false,
-    this.hapticFeedback,
+    this.enableHapticFeedback = false,
     this.enableDot = false,
     this.borderColor = const Color(0XFFF3F3F3),
     this.color,
@@ -182,7 +183,9 @@ class _FancyKeypadState extends State<FancyKeypad> {
                                   widget.onSubmit!(val);
                                   return;
                                 }
-                                HapticFeedback.mediumImpact();
+                                if (widget.enableHapticFeedback) {
+                                  HapticFeedback.mediumImpact();
+                                }
                                 activeButtonListener.value = buttonText;
                                 await Future.delayed(
                                   animationDuration,
