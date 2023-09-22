@@ -4,22 +4,56 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 
+///FancyKey to create a modern customizable numeric keypad
+///Use [FancyKeypad] and pass the required params to use
 class FancyKeypad extends StatefulWidget {
+  /// A callback called every time a button is tapped
   final ValueSetter<String> onKeyTap;
+
+  /// A callback once key tapped is equal to [maxLength]
   final ValueSetter<String>? onSubmit;
+
+  /// Maximum number of key tap
   final int maxLength;
+
+  /// Customizable shape [ShapeBorder]
+  /// Default is [CircleBorder] can be customized using any class the subclass [Border] or [ShapeBorder] e.g [RoundedRectangleBorder]
   final ShapeBorder? shape;
+
+  /// If set to true, [onSubmit] callback will be called once button tap is equal [maxLength]
   final bool autoSubmit;
+
+  /// If set to true, dot button will be included, if false an empty widget will be used
   final bool enableDot;
+
+  ///To set haptic feedback on key tap
   final HapticFeedback? hapticFeedback;
+
+  ///Child aspect ratio, to set the size of the buttons
   final double childAspectRatio;
+
+  ///Buttons background color
   final Color? color;
+
+  ///Buttons background image, if [Null] it will be ingnored and color will be used
   final DecorationImage? backgroundImage;
+
+  ///Splash animation duration
   final Duration? splashAnimationDuration;
+
+  /// Splash animation curve
   final Curve curve;
+
+  /// Backspace button icon
   final IconData? backspaceButtonIcon;
+
+  ///Buttons splash color on tap
   final Color? splashColor;
+
+  ///Buttons border color
   final Color borderColor;
+
+  ///Buttons text color
   final Color? textColor;
   const FancyKeypad({
     Key? key,
@@ -142,6 +176,12 @@ class _FancyKeypadState extends State<FancyKeypad> {
                               splashAnimationDuration: animationDuration,
                               shape: shape,
                               onTap: () async {
+                                if (value.length >= widget.maxLength &&
+                                    widget.autoSubmit &&
+                                    !widget.onSubmit.isNull) {
+                                  widget.onSubmit!(val);
+                                  return;
+                                }
                                 HapticFeedback.mediumImpact();
                                 activeButtonListener.value = buttonText;
                                 await Future.delayed(
