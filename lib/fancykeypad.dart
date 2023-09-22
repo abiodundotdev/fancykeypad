@@ -7,17 +7,19 @@ import 'package:flutter/services.dart';
 class FancyKeypad extends StatefulWidget {
   final ValueSetter<String> onKeyTap;
   final ValueSetter<String>? onSubmit;
-  final int maxAllowableCharacters;
+  final int maxLength;
   final ShapeBorder? shape;
   final bool autoSubmit;
   final bool enableDot;
   final HapticFeedback? hapticFeedback;
   final double childAspectRatio;
   final Color? color;
+  final DecorationImage? backgroundImage;
   final Duration? splashAnimationDuration;
   final Curve curve;
+  final IconData? backspaceButtonIcon;
   final Color? splashColor;
-  final Color? borderColor;
+  final Color borderColor;
   final Color? textColor;
   const FancyKeypad({
     Key? key,
@@ -34,7 +36,9 @@ class FancyKeypad extends StatefulWidget {
     this.textColor,
     this.splashAnimationDuration,
     this.curve = Curves.linear,
-    required this.maxAllowableCharacters,
+    this.backspaceButtonIcon,
+    this.backgroundImage,
+    required this.maxLength,
   }) : super(key: key);
   @override
   State<FancyKeypad> createState() => _FancyKeypadState();
@@ -42,9 +46,8 @@ class FancyKeypad extends StatefulWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties
-        .add(IntProperty('maxAllowableCahracters', maxAllowableCharacters));
-    properties.add(DiagnosticsProperty<Function>('animateColor', onKeyTap));
+    properties.add(IntProperty('maxAllowableCahracters', maxLength));
+    properties.add(DiagnosticsProperty<Color>('color', color));
   }
 }
 
@@ -80,9 +83,9 @@ class _FancyKeypadState extends State<FancyKeypad> {
   @override
   Widget build(BuildContext context) {
     ShapeBorder shape = widget.shape ??
-        const CircleBorder(
+        CircleBorder(
           side: BorderSide(
-            color: Color(0XFFF3F3F3),
+            color: widget.borderColor,
           ),
         );
     Duration animationDuration =
@@ -101,6 +104,7 @@ class _FancyKeypadState extends State<FancyKeypad> {
               return buttonTexts[i] == "DEL"
                   ? Container(
                       decoration: ShapeDecoration(
+                        image: widget.backgroundImage,
                         color: widget.color,
                         shape: shape,
                       ),
@@ -115,8 +119,8 @@ class _FancyKeypadState extends State<FancyKeypad> {
                           widget.onKeyTap(value);
                         },
                         icon: Icon(
-                          Icons.backspace,
-                          size: constraints.maxWidth / 2,
+                          widget.backspaceButtonIcon ?? Icons.backspace,
+                          size: constraints.maxWidth / 3,
                           color: widget.textColor,
                         ),
                       ),
@@ -126,7 +130,8 @@ class _FancyKeypadState extends State<FancyKeypad> {
                       : ValueListenableBuilder(
                           valueListenable: activeButtonListener,
                           builder: (context, String val, _) {
-                            return FancyKeypadButton(
+                            return _FancyKeypadButton(
+                              backgroundImage: widget.backgroundImage,
                               constraints: constraints,
                               key: Key("pad$buttonText"),
                               curve: widget.curve,
@@ -143,8 +148,7 @@ class _FancyKeypadState extends State<FancyKeypad> {
                                   animationDuration,
                                 );
                                 activeButtonListener.value = "";
-                                if (value.length <
-                                    widget.maxAllowableCharacters) {
+                                if (value.length < widget.maxLength) {
                                   if (value.contains(".")) {
                                     final precisions = value.split(".")[1];
                                     if (precisions.length <= 2) {
@@ -167,8 +171,8 @@ class _FancyKeypadState extends State<FancyKeypad> {
   }
 }
 
-class FancyKeypadButton extends StatelessWidget {
-  const FancyKeypadButton({
+class _FancyKeypadButton extends StatelessWidget {
+  const _FancyKeypadButton({
     Key? key,
     required this.constraints,
     required this.text,
@@ -180,6 +184,7 @@ class FancyKeypadButton extends StatelessWidget {
     required this.splashAnimationDuration,
     required this.color,
     required this.curve,
+    this.backgroundImage,
   }) : super(key: key);
   final BoxConstraints constraints;
   final String text;
@@ -188,6 +193,7 @@ class FancyKeypadButton extends StatelessWidget {
   final Duration splashAnimationDuration;
   final ShapeBorder shape;
   final Color splashColor;
+  final DecorationImage? backgroundImage;
   final VoidCallback onTap;
   final Color color;
   final Curve curve;
@@ -202,12 +208,11 @@ class FancyKeypadButton extends StatelessWidget {
         duration: splashAnimationDuration,
         key: ValueKey(text),
         decoration: ShapeDecoration(
-          color: isTapped ? splashColor : color,
-          shape: const CircleBorder(
-            side: BorderSide(
-              color: Color(0XFFF3F3F3),
-            ),
-          ),
+          image: backgroundImage,
+          color: backgroundImage.isNull
+              ? (isTapped ? splashColor : color)
+              : Colors.transparent,
+          shape: shape,
         ),
         constraints: constraints.tighten(
           width: constraints.maxWidth,

@@ -42,12 +42,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            const SizedBox(height: 100.0),
             Expanded(
-              flex: 4,
+              flex: 3,
               child: Text(
                 value,
                 style: const TextStyle(
-                    fontSize: 30.0, fontWeight: FontWeight.w900),
+                    fontSize: 80.0, fontWeight: FontWeight.w900),
               ),
             ),
             const SizedBox(height: 20.0),
@@ -56,7 +57,13 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Padding(
                 padding: const EdgeInsets.all(20.0),
                 child: FancyKeypad(
-                  textColor: Colors.red,
+                  // backgroundImage: const DecorationImage(
+                  //     image: NetworkImage(
+                  //         "https://images.unsplash.com/32/Mc8kW4x9Q3aRR3RkP5Im_IMG_4417.jpg?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGJhY2tncm91bmQlMjBpbWFnZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60")),
+                  shape: Border.all(
+                    color: Color(0XFFF3F3F3),
+                  ),
+                  textColor: Colors.white,
                   splashColor: Colors.green,
                   enableDot: true,
                   onKeyTap: (val) {
@@ -64,7 +71,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       value = val;
                     });
                   },
-                  maxAllowableCharacters: 5,
+                  maxLength: 5,
                 ),
               ),
             )

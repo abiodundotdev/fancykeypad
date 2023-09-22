@@ -1,39 +1,58 @@
-<!--
-This README describes the package. If you publish this package to pub.dev,
-this README's contents appear on the landing page for your package.
+# FancyKeypad
 
-For information about how to write a good package README, see the guide for
-[writing package pages](https://dart.dev/guides/libraries/writing-package-pages).
+A fancy numeric keypad in flutter
 
-For general information about developing packages, see the Dart guide for
-[creating packages](https://dart.dev/guides/libraries/create-library-packages)
-and the Flutter guide for
-[developing packages and plugins](https://flutter.dev/developing-packages).
--->
+## 🎖 Installing
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
-## Features
-
-TODO: List what your package can do. Maybe include images, gifs, or videos.
-
-## Getting started
-
-TODO: List prerequisites and provide or point to information on how to
-start using the package.
-
-## Usage
-
-TODO: Include short and useful examples for package users. Add longer examples
-to `/example` folder.
-
-```dart
-const like = 'sample';
+```yaml
+dependencies:
+  fancykeypad : ^1.0.0
 ```
 
-## Additional information
+### ⚡️ Import
+```dart
+import 'package:fancykeypad/fancykeypad.dart';
+```
 
-TODO: Tell users more about the package: where to find more information, how to
-contribute to the package, how to file issues, what response they can expect
-from the package authors, and more.
+## 🎮 How To Use
+
+### Simply create a `FancyKeypad` widget and pass the required params:
+
+```dart
+FancyKeypad(
+    onKeyTap: (String val) {
+        print(val);                
+    },
+    maxLength: 5,
+    shape: Border.all(
+        color: Color(0XFFF3F3F3),
+    ),
+    textColor: Colors.white,
+    splashColor: Colors.green,
+)
+```
+
+### `FancyKeypad` widget with image as background :
+
+```dart
+FancyKeypad(
+    onKeyTap: (String val) {
+        print(val);                
+    },
+    maxLength: 5,
+     backgroundImage: const DecorationImage(
+                    image: NetworkImage(
+     "https://images.unsplash.com/32/Mc8kW4x9Q3aRR3RkP5Im_IMG_4417.jpg?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTV8fGJhY2tncm91bmQlMjBpbWFnZXxlbnwwfHwwfHx8MA%3D%3D&auto=format&fit=crop&w=800&q=60")),
+)
+```
+
+
+## Example
+
+Example UI for the widget:
+![Example](https://raw.githubusercontent.com/abiodundotdev/fancykeypad/main/example1.png)
+
+![Example](https://raw.githubusercontent.com/abiodundotdev/fancykeypad/main/example2.png)
+
+
+If something is missing, feel free to open a ticket or contribute!
