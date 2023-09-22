@@ -130,7 +130,7 @@ class _FancyKeypadState extends State<FancyKeypad> {
                       : ValueListenableBuilder(
                           valueListenable: activeButtonListener,
                           builder: (context, String val, _) {
-                            return _FancyKeypadButton(
+                            return FancyKeypadButton(
                               backgroundImage: widget.backgroundImage,
                               constraints: constraints,
                               key: Key("pad$buttonText"),
@@ -171,8 +171,8 @@ class _FancyKeypadState extends State<FancyKeypad> {
   }
 }
 
-class _FancyKeypadButton extends StatelessWidget {
-  const _FancyKeypadButton({
+class FancyKeypadButton extends StatelessWidget {
+  const FancyKeypadButton({
     Key? key,
     required this.constraints,
     required this.text,

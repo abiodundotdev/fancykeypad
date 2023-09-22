@@ -24,6 +24,18 @@ FancyKeypad(
         print(val);                
     },
     maxLength: 5,
+    splashColor: Colors.green,
+)
+```
+
+### `FancyKeypad` widget with custom shapes :
+
+```dart
+FancyKeypad(
+    onKeyTap: (String val) {
+        print(val);                
+    },
+    maxLength: 5,
     shape: Border.all(
         color: Color(0XFFF3F3F3),
     ),
