@@ -39,8 +39,6 @@ FancyKeypad(
     shape: Border.all(
         color: Color(0XFFF3F3F3),
     ),
-    textColor: Colors.white,
-    splashColor: Colors.green,
 )
 ```
 

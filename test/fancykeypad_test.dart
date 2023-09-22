@@ -1,12 +1,21 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'package:fancykeypad/fancykeypad.dart';
 
 void main() {
-  test('adds one to input values', () {
-    // final calculator = Calculator();
-    // expect(calculator.addOne(2), 3);
-    // expect(calculator.addOne(-7), -6);
-    // expect(calculator.addOne(0), 1);
+  late Widget keypadWidget;
+
+  setUpAll(() {
+    keypadWidget = MaterialApp(
+      home: Material(child: FancyKeypad(onKeyTap: (va) {}, maxLength: 4)),
+    );
+  });
+
+  group("Keypad test", () {
+    testWidgets("Vefiry has required ", (widgetTester) async {
+      await widgetTester.pumpWidget(keypadWidget);
+      //final finder  =
+    });
   });
 }
