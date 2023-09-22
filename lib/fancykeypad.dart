@@ -90,7 +90,7 @@ class _FancyKeypadState extends State<FancyKeypad> {
       crossAxisCount: 3,
       mainAxisSpacing: 25.0,
       crossAxisSpacing: 40.0,
-      childAspectRatio: widget.childAspectRatio,
+      childAspectRatio: 16 / 13,
       children: [
         for (var i = 0; i < buttonTexts.length; i++)
           LayoutBuilder(
@@ -193,7 +193,7 @@ class FancyKeypadButton extends StatelessWidget {
       onTap: onTap,
       customBorder: const CircleBorder(),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 800),
+        duration: splashAnimationDuration,
         key: ValueKey(text),
         decoration: ShapeDecoration(
           color: isTapped ? splashColor : color,
