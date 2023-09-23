@@ -68,6 +68,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   enableDot: true,
                   onKeyTap: (val) {
                     setState(() {
+                      //setState
                       value = val;
                     });
                   },
